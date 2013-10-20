@@ -14,7 +14,8 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="10dp"
         android:text="@string/server_address"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/ip"
@@ -24,7 +25,8 @@
         android:layout_toRightOf="@id/ip_label"
         android:hint="@string/hint_for_ip"
         android:text="@string/default_ip"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        android:visibility="gone"/>
 
     <!-- Port -->
 
@@ -36,7 +38,8 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="10dp"
         android:text="@string/server_port"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"  
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/port"
@@ -49,7 +52,8 @@
         android:hint="@string/hint_for_port"
         android:inputType="number"
         android:text="@string/default_port"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"  
+        android:visibility="gone"/>
 
     <!-- Message -->
 
@@ -57,7 +61,6 @@
         android:id="@+id/msg_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/port_label"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="10dp"
         android:text="@string/msg_label"
@@ -68,7 +71,6 @@
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/ip"
-        android:layout_below="@id/port_label"
         android:layout_marginTop="0dp"
         android:singleLine="true"
         android:layout_toRightOf="@id/msg_label"
@@ -85,7 +87,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="0dp"
         android:max="@string/max_step_value"
-        android:progress="@string/default_step_value" />
+        android:progress="@string/default_step_value"  
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/label_step"
@@ -96,7 +99,8 @@
         android:layout_marginTop="0dp"
         android:layout_toRightOf="@id/sb_step"
         android:gravity="center_horizontal"
-        android:text="@string/label_default_step" />
+        android:text="@string/label_default_step"  
+        android:visibility="gone"/>
 
     <!-- send button -->
 
@@ -104,7 +108,7 @@
         android:id="@+id/bt_send"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_below="@id/sb_step"
+        android:layout_below="@id/msg_label"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"

@@ -20,5 +20,7 @@
     <string name="down">向  下</string>
     <string name="right_click">右  击</string>
     <string name="toast_invalid_ip">服务器信息不正确，使用之前的配置信息!</string>
+    
+    <string name="label_accuracy">精度：</string>
 
 </resources>

@@ -10,19 +10,17 @@ import java.util.concurrent.Executors;
 
 import com.stone.softkeyboard.LatinKeyboard;
 import com.stone.softkeyboard.LatinKeyboardView;
-import com.stone.softkeyboard.SoftKeyboard;
 
+import android.R.integer;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.app.Activity;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.TextureView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -44,12 +42,14 @@ public class MainActivity extends Activity implements
 			+ "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\."
 			+ "(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
 
-	private EditText mIP;
-	private EditText mPort;
+	// private EditText mIP;
+	// private EditText mPort;
 	private EditText mCommand;
 
-	private SeekBar mStep;
-	private TextView mStepValue;
+	// private SeekBar mStep;
+	// private TextView mStepValue;
+
+	private int mMouseAccuracy = 3;
 
 	private ExecutorService mExecutors = Executors.newSingleThreadExecutor();
 
@@ -95,7 +95,7 @@ public class MainActivity extends Activity implements
 						mServerIP, mServerPort));
 			} else if (id == R.id.bt_down) {// down
 				mExecutors.execute(new SocketRunnable(MouseAction.DOWN,
-						mServerIP, mServerPort)); 
+						mServerIP, mServerPort));
 			}
 		}
 	};
@@ -108,7 +108,7 @@ public class MainActivity extends Activity implements
 		public boolean onLongClick(View v) {
 			// TODO Auto-generated method stub
 			mLongClickBegin = true;
-			updateServerInfo();
+			//updateServerInfo();
 
 			mLongClickSocketRunnable = null;
 			int id = v.getId();
@@ -162,19 +162,19 @@ public class MainActivity extends Activity implements
 	};
 
 	private void updateServerInfo() {
-		String IP = mIP.getText().toString();
-		String port = mPort.getText().toString();
-		if (IP != null && port != null && IP.matches(IP_REGLEX)
-				&& port.length() == 4) {
-			mServerIP = IP;
-			mServerPort = Integer.valueOf(port);
-		} else {
-			Toast.makeText(getApplicationContext(),
-					MainActivity.this.getString(R.string.toast_invalid_ip),
-					Toast.LENGTH_SHORT).show();
-			mIP.setText(mServerIP);
-			mPort.setText(String.valueOf(mServerPort));
-		}
+		// String IP = mIP.getText().toString();
+		// String port = mPort.getText().toString();
+		// if (IP != null && port != null && IP.matches(IP_REGLEX)
+		// && port.length() == 4) {
+		// mServerIP = IP;
+		// mServerPort = Integer.valueOf(port);
+		// } else {
+		// Toast.makeText(getApplicationContext(),
+		// MainActivity.this.getString(R.string.toast_invalid_ip),
+		// Toast.LENGTH_SHORT).show();
+		// mIP.setText(mServerIP);
+		// mPort.setText(String.valueOf(mServerPort));
+		// }
 	}
 
 	private OnSeekBarChangeListener mChangeListener = new OnSeekBarChangeListener() {
@@ -182,7 +182,7 @@ public class MainActivity extends Activity implements
 		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			// TODO Auto-generated method stub
-			updateServerInfo();
+			//updateServerInfo();
 			int step = seekBar.getProgress();
 			if (step < 1) {
 				step = 1;
@@ -192,6 +192,7 @@ public class MainActivity extends Activity implements
 			if (command != null && command.matches("#[1-9]+[0-9]*")) {
 				mExecutors.execute(new SocketRunnable(command, mServerIP,
 						mServerPort));
+				mMouseAccuracy = seekBar.getProgress();
 			}
 		}
 
@@ -205,19 +206,7 @@ public class MainActivity extends Activity implements
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
 			// TODO Auto-generated method stub
-			mStepValue.setText(String.valueOf(progress));
-		}
-	};
-
-	private Handler mHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			if (msg.what == 1) {
-				String ip = (String) msg.obj;
-				mIP.setText(ip);
-
-				Toast.makeText(getApplicationContext(), "Find Server IP",
-						Toast.LENGTH_SHORT).show();
-			}
+			// mStepValue.setText(String.valueOf(progress));
 		}
 	};
 
@@ -227,8 +216,8 @@ public class MainActivity extends Activity implements
 		setContentView(R.layout.activity_main);
 
 		// init
-		mIP = (EditText) findViewById(R.id.ip);
-		mPort = (EditText) findViewById(R.id.port);
+		// mIP = (EditText) findViewById(R.id.ip);
+		// mPort = (EditText) findViewById(R.id.port);
 		mCommand = (EditText) findViewById(R.id.msg);
 
 		mSendButton = (Button) findViewById(R.id.bt_send);
@@ -239,8 +228,8 @@ public class MainActivity extends Activity implements
 		mLeftButton = (Button) findViewById(R.id.bt_left);
 		mRightButton = (Button) findViewById(R.id.bt_right);
 		mDownButton = (Button) findViewById(R.id.bt_down);
-		mStep = (SeekBar) findViewById(R.id.sb_step);
-		mStepValue = (TextView) findViewById(R.id.label_step);
+		// mStep = (SeekBar) findViewById(R.id.sb_step);
+		// mStepValue = (TextView) findViewById(R.id.label_step);
 
 		// for click
 		mSendButton.setOnClickListener(mClickListener);
@@ -263,7 +252,7 @@ public class MainActivity extends Activity implements
 		mDownButton.setOnTouchListener(mOnTouchListener);
 
 		// for seekbars
-		mStep.setOnSeekBarChangeListener(mChangeListener);
+		// mStep.setOnSeekBarChangeListener(mChangeListener);
 
 		mKeyboardView = (LatinKeyboardView) findViewById(R.id.keyboard);
 		mQwertyKeyboard = new LatinKeyboard(this, R.xml.qwerty);
@@ -273,50 +262,6 @@ public class MainActivity extends Activity implements
 
 		mSymbolsKeyboard = new LatinKeyboard(this, R.xml.symbols);
 		mSymbolsShiftedKeyboard = new LatinKeyboard(this, R.xml.symbols_shift);
-
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				boolean toFind = true;
-				Socket socket = null;
-				String ip = "192.168.1.";
-				int i = 99;
-				while (toFind && i < 255) {
-					try {
-						socket = new Socket(ip + (i++), mServerPort);
-						Thread.sleep(50);
-					} catch (UnknownHostException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						socket = null;
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						socket = null;
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						socket = null;
-					}
-
-					if (socket != null) {
-						Message msg = new Message();
-						msg.what = 1;
-						msg.obj = ip + (i - 1);
-						mHandler.sendMessage(msg);
-						try {
-							socket.close();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						toFind = false;
-					}
-				}
-			}
-		});
 	}
 
 	private LatinKeyboardView mKeyboardView;
@@ -326,7 +271,6 @@ public class MainActivity extends Activity implements
 	private void setQwertyKeyboard() {
 		mKeyboardView.setKeyboard(mQwertyKeyboard);
 		mQwertyKeyboard.setShifted(mShifted);
-		// mKeyboardView.invalidateAllKeys();
 	}
 
 	private void setSymbolsKeyboard() {
@@ -340,15 +284,101 @@ public class MainActivity extends Activity implements
 			mKeyboardView.setKeyboard(mSymbolsKeyboard);
 			mSymbolsKeyboard.setShifted(false);
 		}
-
-		// mKeyboardView.invalidateAllKeys();
 	}
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// getMenuInflater().inflate(R.menu.activity_main, menu);
-	// return true;
-	// }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+
+	private android.content.DialogInterface.OnClickListener mPositiveClickListener = new DialogInterface.OnClickListener() {
+
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			// TODO Auto-generated method stub
+			if (which == DialogInterface.BUTTON_POSITIVE) {
+				EditText ipEditText = (EditText) mDialogContent
+						.findViewById(R.id.ip);
+				EditText portEditText = (EditText) mDialogContent
+						.findViewById(R.id.port);
+
+				String IP = ipEditText.getText().toString();
+				String port = portEditText.getText().toString();
+				if (IP != null && port != null && IP.matches(IP_REGLEX)
+						&& port.length() == 4) {
+					mServerIP = IP;
+					mServerPort = Integer.valueOf(port);
+					
+					//set step
+					SeekBar seekBar = (SeekBar)mDialogContent.findViewById(R.id.sb_step);
+					int step = seekBar.getProgress();
+					if (step < 1) {
+						step = 1;
+						seekBar.setProgress(step);
+					}
+					String command = "#" + String.valueOf(step);
+					if (command != null && command.matches("#[1-9]+[0-9]*")) {
+						mExecutors.execute(new SocketRunnable(command, mServerIP,
+								mServerPort));
+						mMouseAccuracy = seekBar.getProgress();
+					}
+				} else {
+					Toast.makeText(
+							getApplicationContext(),
+							MainActivity.this
+									.getString(R.string.toast_invalid_ip),
+							Toast.LENGTH_SHORT).show();
+					mServerIP = "192.168.1.101";
+					mServerPort = 8888;
+				}
+			}
+		}
+
+	};
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		ShowConfigServerDialog();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		if (mDialog != null && mDialog.isShowing())
+			mDialog.dismiss();
+	}
+
+	private AlertDialog mDialog;
+
+	private void ShowConfigServerDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+		mDialogContent = getLayoutInflater().inflate(
+				R.layout.config_server_dialog, null);
+		SeekBar seekBar = (SeekBar) mDialogContent.findViewById(R.id.sb_step);
+		//seekBar.setOnSeekBarChangeListener(mChangeListener);
+		seekBar.setProgress(mMouseAccuracy);
+		
+		mDialog = builder.setView(mDialogContent).setTitle("请设置服务器信息")
+				.setPositiveButton("确定", mPositiveClickListener)
+				.setNegativeButton("取消", null).show();
+	}
+
+	private View mDialogContent = null;
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		if (item.getItemId() == R.id.menu_settings) {
+			ShowConfigServerDialog();
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
 
 	private enum MouseAction {
 		LEFT, RIGHT, UP, DOWN, CLICK, RIGHT_CLICK, DOUBLE_CLICK, SCROLL
