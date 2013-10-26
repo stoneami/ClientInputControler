@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@id/ip_label"
+        android:inputType="number"
         android:hint="@string/hint_for_ip"
         android:text="@string/default_ip"
         android:textAppearance="?android:attr/textAppearanceSmall" />
