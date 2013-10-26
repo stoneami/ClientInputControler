@@ -601,10 +601,29 @@ public class MainActivity extends Activity implements
 	private final static String TAG = "MainActivity";
 
 	@Override
-	public boolean onMove(int startX, int startY, int endX, int endY) {
+	public boolean onMove(int dx, int dy) {
 		// TODO Auto-generated method stub
-		Log.i(TAG, "onMove(), startX=" + startX + " startY=" + startY
-				+ " endX=" + endX + " endY=" + endY);
+		StringBuilder msg = new StringBuilder("###");
+		
+		if(dx>0){
+			msg.append("r");
+			msg.append(String.valueOf(dx));
+		}else{
+			msg.append("l");
+			msg.append(String.valueOf(-dx));
+		}
+		
+		if(dy>0){
+			msg.append("d");
+			msg.append(String.valueOf(dy));
+		}else{
+			msg.append("u");
+			msg.append(String.valueOf(-dy));
+		}
+		
+		Log.i(TAG, "onMove(): msg = " + msg.toString());
+		mExecutors.execute(new SocketRunnable(msg.toString(), mServerIP, mServerPort));
+		
 		return false;
 	}
 

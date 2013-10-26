@@ -32,7 +32,8 @@ public class TouchPadView extends View {
 	private int mStartX = -1;
 	private int mStartY = -1;
 
-	private int mAccuracy = 2;
+	private int mAccuracy = 15;
+	private final static int FACTOR = 5;
 
 	public void setAccuracy(int accuracy) {
 		mAccuracy = accuracy;
@@ -59,7 +60,12 @@ public class TouchPadView extends View {
 
 				if (Math.abs((int) event.getX() - mStartX) - mAccuracy > 0
 						|| Math.abs((int) event.getY() - mStartY) - mAccuracy > 0) {
-					mListener.onMove(mStartX, mStartY, (int) event.getX(), (int) event.getY());
+					
+					int dx = ((int) event.getX()-mStartX)/FACTOR;
+					int dy = ((int) event.getY()-mStartY)/FACTOR;
+					
+					mListener.onMove(dx, dy);
+					
 					mStartX = (int) event.getX();
 					mStartY = (int) event.getY();
 				}
@@ -77,7 +83,7 @@ public class TouchPadView extends View {
 	 * For Inner Classes BEGIN>>>
 	 */
 	public interface TouchPadListener {
-		boolean onMove(int startX, int startY, int endX, int endY);
+		boolean onMove(int dx, int dy);
 	}
 	/*-
 	 * For Inner Classes BEGIN>>>

@@ -23,7 +23,7 @@
     <string name="label_default_step">3</string>
     <string name="default_step_value">3</string>
     <string name="max_step_value">50</string>
-    <string name="label_accuracy">Accuracy:</string>
+    <string name="label_accuracy">Accuracy£º</string>
     
     <!-- for keyboard -->
     <!-- Symbols that are commonly considered word separators in this language -->
